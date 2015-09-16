@@ -20,6 +20,7 @@ http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/moc
         </mock:when>
         <component class="fileprocessing.TestData" doc:name="Java"/>
         <batch:execute name="fileprocessingBatch" doc:name="Run Batch fileprocessingBatch"/>
+		
         <mock:verify-call messageProcessor="batch:job" doc:name="Verify Call">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['fileprocessingBatch']"/>

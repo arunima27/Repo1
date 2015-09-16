@@ -20,4 +20,6 @@
 		<nature>org.mule.tooling.core.muleNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	
 </projectDescription>
+

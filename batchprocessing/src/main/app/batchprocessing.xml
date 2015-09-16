@@ -20,6 +20,7 @@ http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schem
             <batch:step name="Batch_Step">
                 <batch:commit size="3" doc:name="Batch Commit">
                     <sfdc:create config-ref="Salesforce__Basic_authentication" type="Lead" doc:name="Salesforce">
+					<!-- testing -->
                         <sfdc:objects ref="#[payload]"/>
                     </sfdc:create>
                 </batch:commit>
