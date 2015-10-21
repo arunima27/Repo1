@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+    <munit:config mock-connectors="false" mock-inbounds="false" doc:name="Munit configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath:ccp_subscriber_api.xml"/>
+    </spring:beans>
+    <munit:test name="ccp_subscriber_api-test-suite-post:/ccp_subscriber:application/json:apiConfigTest" description="Test">
+        <flow-ref name="post:/ccp_subscriber:application/json:apiConfig" doc:name="Flow-ref to post:/ccp_subscriber:application/json:apiConfig"/>
+        <munit:assert-true condition="#[messageInboundProperty('http.status').is(eq('200'))]" doc:name="Assert True"/>
+    </munit:test>
+    <munit:test name="ccp_subscriber_api-test-suite-post:/ccp_subscriber:application/json:apiConfigTest1" description="Test">
+        <flow-ref name="post:/ccp_subscriber:application/json:apiConfig" doc:name="Flow-ref to post:/ccp_subscriber:application/json:apiConfig"/>
+        <munit:assert-payload-equals message="incorrect Payload" expectedValue="{&quot;return&quot;:{&quot;details&quot;:&quot;Extra Details&quot;,&quot;status&quot;:&quot;Success&quot;,&quot;statusCode&quot;:&quot;000&quot;,&quot;statusDescription&quot;:&quot;Success Description&quot;}}" doc:name="Assert Payload"/>
+    </munit:test>
+    <munit:before-test name="ccp_subscriber_api-test-suiteBefore_Test" description="Before tests actions">
+        <munit:set payload="#[{&quot;Customer&quot;: {&quot;VendorID&quot;: &quot;1234&quot;,&quot;VendorKey&quot;: &quot;77777jjjj&quot;,&quot;ProgramID&quot;: &quot;A5678&quot;,&quot;SubProgramID&quot;: &quot;AAS780&quot;,&quot;EmailAddress&quot;: &quot;aaa@gmail.com&quot;,&quot;PostalCode&quot;: &quot;123678&quot;,&quot;PhoneNumber&quot;: &quot;1234545678&quot;,&quot;Subscriptions&quot;: { &quot;Subscription&quot;: { &quot;ID&quot;: &quot;666&quot;,&quot;OptStatus&quot; :&quot;Y&quot;}}}}]" doc:name="Set Message"/>
+    </munit:before-test>
+    <munit:test name="ccp_subscriber_api-test-suite-post:/ccp_subscriber:application/json:apiConfigTest2" description="Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Status']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <munit:assert-on-equals expectedValue="Success" actualValue="#[flowVars.status]" doc:name="Assert Equals"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <flow-ref name="post:/ccp_subscriber:application/json:apiConfig" doc:name="Flow-ref to post:/ccp_subscriber:application/json:apiConfig"/>
+        <mock:verify-call messageProcessor=".*:.*" atLeast="1" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Epsilon Agility service']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+    <munit:test name="ccp_subscriber_api-test-suite-post:/ccp_subscriber:application/json:apiConfigTest3" description="Test">
+        <flow-ref name="post:/ccp_subscriber:application/json:apiConfig" doc:name="Flow-ref to post:/ccp_subscriber:application/json:apiConfig"/>
+        <mock:verify-call messageProcessor=".*:.*" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Object to JSON']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+        <mock:verify-call messageProcessor=".*:.*" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Final response']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+</mule>
