@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" version="EE-3.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd">
+     <munit:config mock-connectors="false" mock-inbounds="false" doc:name="Munit configuration"/>
+    <spring:beans>
+        <spring:import resource="classpath:mss_api_demo.xml"/>
+    </spring:beans>
+    <munit:test name="mss_api_demo-test-suite-post:/orders:application/json:apiConfigTest" description="Test">
+        <mock:spy doc:name="Spy" messageProcessor=".*:.*">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Database']"/>
+            </mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-on-equals expectedValue="Arunima" actualValue="#[payload.first_name]" doc:name="Assert Equals"/>
+                <munit:assert-on-equals expectedValue="Sharma" actualValue="#[payload.last_name]" doc:name="Assert Equals"/>
+                <munit:assert-on-equals expectedValue="solution.architect@mule.si.com" actualValue="#[payload.email]" doc:name="Assert Equals"/>
+                <munit:assert-on-equals expectedValue="US" actualValue="#[payload.country]" doc:name="Assert Equals"/>
+            </mock:assertions-before-call>
+            <mock:assertions-after-call>
+                <munit:assert-on-equals expectedValue="#[1]" actualValue="#[payload]" doc:name="Assert Equals"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <munit:set payload="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;, &quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;,&quot;quantity&quot;: 10}]}]" doc:name="Set Message"/>
+        <flow-ref name="post:/orders:application/json:apiConfig" doc:name="Flow-ref to post:/orders:application/json:apiConfig"/>
+        <munit:assert-not-null doc:name="Assert Not Null Payload"/>
+    </munit:test>
+    <munit:test name="mss_api_demo-test-suite-post:/orders:application/json:apiConfigTest1" description="Test">
+        <mock:when messageProcessor=".*:.*" doc:name="Mock">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Database']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[1]"/>
+        </mock:when>
+        <munit:set payload="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;, &quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;,&quot;quantity&quot;: 10}]}]" doc:name="Set Message"/>
+        <flow-ref name="post:/orders:application/json:apiConfig" doc:name="Flow-ref to post:/orders:application/json:apiConfig"/>
+        <munit:assert-not-null doc:name="Assert Not Null Payload"/>
+    </munit:test>
+    <munit:test name="mss_api_demo-test-suite-post:/orders:application/json:apiConfigTest2" description="Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['create Java object']"/>
+            </mock:with-attributes>
+            <mock:assertions-before-call>
+                <munit:assert-on-equals expectedValue="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;,&quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;, &quot;quantity&quot;: 10 }] }]" actualValue="#[payload]" doc:name="Assert Equals"/>
+            </mock:assertions-before-call>
+        </mock:spy>
+        <munit:set payload="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;, &quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;,&quot;quantity&quot;: 10}]}]" doc:name="Set Message"/>
+        <flow-ref name="post:/orders:application/json:apiConfig" doc:name="Flow-ref to post:/orders:application/json:apiConfig"/>
+        <munit:assert-true condition="#[payload.contains({&quot;id&quot;: 1,&quot;status&quot;: &quot;Success&quot;})]" doc:name="Assert True"/>
+    </munit:test>
+    <munit:test name="mss_api_demo-test-suite-post:/orders:application/json:apiConfigTest3" description="Test">
+        <munit:set payload="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;, &quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;,&quot;quantity&quot;: 10}]}]" doc:name="Set Message"/>
+        <flow-ref name="post:/orders:application/json:apiConfig" doc:name="Flow-ref to post:/orders:application/json:apiConfig"/>
+        <mock:verify-call messageProcessor=".*:.*" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['create Java object']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+        <mock:verify-call messageProcessor=".*:.*" atLeast="1" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Database']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+    <munit:test name="mss_api_demo-test-suite-post:/orders:application/json:apiConfigTest4" description="Test">
+        <munit:set payload="#[ {&quot;first_name&quot;: &quot;Arunima&quot;,&quot;last_name&quot;: &quot;Sharma&quot;, &quot;email&quot;: &quot;solution.architect@mule.si.com&quot;,&quot;country&quot;: &quot;US&quot;,&quot;products&quot;: [{&quot;name&quot;: &quot;Squishy Mule&quot;,&quot;quantity&quot;: 10}]}]" doc:name="Set Message"/>
+        <flow-ref name="post:/orders:application/json:apiConfig" doc:name="Flow-ref to post:/orders:application/json:apiConfig"/>
+        <mock:verify-call messageProcessor=".*:.*" times="1" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Scatter-Gather']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+        <mock:verify-call messageProcessor=".*:.*" times="1" doc:name="Verify Call">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Logger']"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+</mule>
