@@ -1,0 +1,237 @@
+<wsdl:definitions targetNamespace="http://www.epsilon.com/webservices/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.epsilon.com/webservices/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+   <wsdl:types>
+      <s:schema elementFormDefault="qualified" targetNamespace="http://www.epsilon.com/webservices/">
+         <s:element name="VendorEnrollment">
+            <s:complexType>
+               <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="ClientID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="VendorID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="VendorKey" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="ProgramID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="SubProgramID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="DOB" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="CreateDate" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Age" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="IP" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Culture" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EntryCode" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EntryCodeType" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Redemption" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="RedeemedAt" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Subscriptions" type="tns:ArrayOfSubscription"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="ExternalInfo" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="CultureInfo" type="s:string"/>
+               </s:sequence>
+            </s:complexType>
+         </s:element>
+         <s:complexType name="ArrayOfSubscription">
+            <s:sequence>
+               <s:element minOccurs="0" maxOccurs="unbounded" name="Subscription" nillable="true" type="tns:Subscription"/>
+            </s:sequence>
+         </s:complexType>
+         <s:complexType name="Subscription">
+            <s:sequence>
+               <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string"/>
+               <s:element minOccurs="0" maxOccurs="1" name="OPTSTATUS" type="s:string"/>
+            </s:sequence>
+         </s:complexType>
+         <s:element name="VendorEnrollmentResponse">
+            <s:complexType>
+               <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="VendorEnrollmentResult">
+                     <s:complexType>
+                        <s:sequence>
+                           <s:element minOccurs="0" maxOccurs="1" name="MTServerName" type="s:string"/>
+                           <s:element minOccurs="0" maxOccurs="1" name="Additional" type="s:string"/>
+                           <s:element minOccurs="0" maxOccurs="unbounded" name="Response">
+                              <s:complexType>
+                                 <s:sequence>
+                                    <s:element minOccurs="0" maxOccurs="unbounded" name="ErrorDesc" nillable="true">
+                                       <s:complexType>
+                                          <s:simpleContent>
+                                             <s:extension base="s:string">
+                                                <s:attribute name="Type" type="s:string"/>
+                                                <s:attribute name="Number" type="s:string"/>
+                                                <s:attribute name="StatusCode" type="s:string"/>
+                                             </s:extension>
+                                          </s:simpleContent>
+                                       </s:complexType>
+                                    </s:element>
+                                 </s:sequence>
+                                 <s:attribute name="Type" type="s:string"/>
+                              </s:complexType>
+                           </s:element>
+                        </s:sequence>
+                     </s:complexType>
+                  </s:element>
+               </s:sequence>
+            </s:complexType>
+         </s:element>
+         <s:element name="GMAEnrollment">
+            <s:complexType>
+               <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="ClientID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="VendorID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="VendorKey" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="ProgramID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="SubProgramID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="DOB" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="AddressLine2" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="PostalCode" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="CreateDate" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Age" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="IP" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Source" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Culture" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EntryCode" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="EntryCodeType" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Redemption" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="RedeemedAt" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="Subscriptions" type="tns:ArrayOfSubscription"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="ExternalInfo" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="CultureInfo" type="s:string"/>
+                  <s:element minOccurs="0" maxOccurs="1" name="InactiveIndicator" type="s:string"/>
+               </s:sequence>
+            </s:complexType>
+         </s:element>
+         <s:element name="GMAEnrollmentResponse">
+            <s:complexType>
+               <s:sequence>
+                  <s:element minOccurs="0" maxOccurs="1" name="GMAEnrollmentResult">
+                     <s:complexType>
+                        <s:sequence>
+                           <s:element minOccurs="0" maxOccurs="1" name="MTServerName" type="s:string"/>
+                           <s:element minOccurs="0" maxOccurs="1" name="Additional" type="s:string"/>
+                           <s:element minOccurs="0" maxOccurs="unbounded" name="Response">
+                              <s:complexType>
+                                 <s:sequence>
+                                    <s:element minOccurs="0" maxOccurs="1" name="Operation" type="s:string"/>
+                                    <s:element minOccurs="0" maxOccurs="unbounded" name="ErrorDesc" nillable="true">
+                                       <s:complexType>
+                                          <s:simpleContent>
+                                             <s:extension base="s:string">
+                                                <s:attribute name="Type" type="s:string"/>
+                                                <s:attribute name="Number" type="s:string"/>
+                                                <s:attribute name="StatusCode" type="s:string"/>
+                                             </s:extension>
+                                          </s:simpleContent>
+                                       </s:complexType>
+                                    </s:element>
+                                 </s:sequence>
+                                 <s:attribute name="Type" type="s:string"/>
+                              </s:complexType>
+                           </s:element>
+                        </s:sequence>
+                     </s:complexType>
+                  </s:element>
+               </s:sequence>
+            </s:complexType>
+         </s:element>
+      </s:schema>
+   </wsdl:types>
+   <wsdl:message name="VendorEnrollmentSoapIn">
+      <wsdl:part name="parameters" element="tns:VendorEnrollment"/>
+   </wsdl:message>
+   <wsdl:message name="VendorEnrollmentSoapOut">
+      <wsdl:part name="parameters" element="tns:VendorEnrollmentResponse"/>
+   </wsdl:message>
+   <wsdl:message name="GMAEnrollmentSoapIn">
+      <wsdl:part name="parameters" element="tns:GMAEnrollment"/>
+   </wsdl:message>
+   <wsdl:message name="GMAEnrollmentSoapOut">
+      <wsdl:part name="parameters" element="tns:GMAEnrollmentResponse"/>
+   </wsdl:message>
+   <wsdl:portType name="MCDSVendorSoap">
+      <wsdl:operation name="VendorEnrollment">
+         <wsdl:input message="tns:VendorEnrollmentSoapIn"/>
+         <wsdl:output message="tns:VendorEnrollmentSoapOut"/>
+      </wsdl:operation>
+      <wsdl:operation name="GMAEnrollment">
+         <wsdl:input message="tns:GMAEnrollmentSoapIn"/>
+         <wsdl:output message="tns:GMAEnrollmentSoapOut"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:portType name="MCDSVendorHttpGet"/>
+   <wsdl:portType name="MCDSVendorHttpPost"/>
+   <wsdl:binding name="MCDSVendorSoap" type="tns:MCDSVendorSoap">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="VendorEnrollment">
+         <soap:operation soapAction="http://www.epsilon.com/webservices/VendorEnrollment" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="GMAEnrollment">
+         <soap:operation soapAction="http://www.epsilon.com/webservices/GMAEnrollment" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="MCDSVendorSoap12" type="tns:MCDSVendorSoap">
+      <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="VendorEnrollment">
+         <soap12:operation soapAction="http://www.epsilon.com/webservices/VendorEnrollment" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="GMAEnrollment">
+         <soap12:operation soapAction="http://www.epsilon.com/webservices/GMAEnrollment" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="MCDSVendorHttpGet" type="tns:MCDSVendorHttpGet">
+      <http:binding verb="GET"/>
+   </wsdl:binding>
+   <wsdl:binding name="MCDSVendorHttpPost" type="tns:MCDSVendorHttpPost">
+      <http:binding verb="POST"/>
+   </wsdl:binding>
+   <wsdl:service name="MCDSVendor">
+      <wsdl:port name="MCDSVendorSoap" binding="tns:MCDSVendorSoap">
+         <soap:address location="https://profileuat.mcdonalds.com/MCDSWsc/MCDSVendor.asmx"/>
+      </wsdl:port>
+      <wsdl:port name="MCDSVendorSoap12" binding="tns:MCDSVendorSoap12">
+         <soap12:address location="https://profileuat.mcdonalds.com/MCDSWsc/MCDSVendor.asmx"/>
+      </wsdl:port>
+      <wsdl:port name="MCDSVendorHttpGet" binding="tns:MCDSVendorHttpGet">
+         <http:address location="https://profileuat.mcdonalds.com/MCDSWsc/MCDSVendor.asmx"/>
+      </wsdl:port>
+      <wsdl:port name="MCDSVendorHttpPost" binding="tns:MCDSVendorHttpPost">
+         <http:address location="https://profileuat.mcdonalds.com/MCDSWsc/MCDSVendor.asmx"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

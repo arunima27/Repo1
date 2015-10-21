@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:context="http://www.springframework.org/schema/context" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+    <context:property-placeholder location="api.properties" />
+    <apikit:config name="apiConfig" raml="api.raml" consoleEnabled="true" consolePath="console" doc:name="Router" />
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration" />
+    <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="WSDL_VT.wsdl" service="MCDSVendor" port="MCDSVendorSoap" serviceAddress="https://profileuat.mcdonalds.com/MCDSWsc/MCDSVendor.asmx" doc:name="Web Service Consumer"/>
+    <data-mapper:config name="Json_To_Xml_VendorEnrollment_" transformationGraphPath="json_to_xml_vendorenrollment_.grf" doc:name="Json_To_Xml_VendorEnrollment_"/>
+
+    <flow name="main" >
+        <http:listener config-ref="HTTP_Listener_Configuration" doc:name="HTTP" path="/api/*" />
+        <apikit:router config-ref="apiConfig" doc:name="APIkit Router" />
+        <exception-strategy ref="apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy" />
+    </flow>
+    <flow name="post:/ccp_subscriber:application/json:apiConfig">
+        <data-mapper:transform config-ref="Json_To_Xml_VendorEnrollment_" doc:name="Json To Xml&lt;VendorEnrollment&gt;"/>
+        <byte-array-to-object-transformer doc:name="Byte Array to Object"/>
+        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+
+        <ws:consumer config-ref="Web_Service_Consumer" operation="VendorEnrollment" doc:name="Web Service Consumer"/>
+        <set-payload value="{&#xA;              &quot;status&quot;: &quot;ok&quot;,&#xA;                &quot;statusCode&quot;: 000&quot;&#xA;                &quot;statusDescription&quot;: &quot;successful&quot;,&#xA;                &quot;details&quot;: {&#xA;  &quot;Customer&quot;: {&#xA;    &quot;ClientID&quot;: &quot;123&quot;,&#xA;    &quot;VendorID&quot;: &quot;1234&quot;,&#xA;    &quot;VendorKey&quot;: &quot;77777jjjj&quot;,&#xA;    &quot;ProgramID&quot;: &quot;A5678&quot;,&#xA;    &quot;SubProgramID&quot;: &quot;AAS780&quot;,&#xA;    &quot;EmailAddress&quot;: &quot;aaa@gmail.com&quot;,&#xA;    &quot;FirstName&quot;: &quot;ABC&quot;,&#xA;    &quot;LastName&quot;: &quot;DEF&quot;,&#xA;    &quot;DOB&quot;: &quot;05-MAR-1999&quot;,&#xA;    &quot;AddressLine1&quot;: &quot;Noida&quot;,&#xA;    &quot;AddressLine2&quot;: &quot;Country&quot;,&#xA;    &quot;City&quot;: &quot;Noida&quot;,&#xA;    &quot;State&quot;: &quot;UP&quot;,&#xA;    &quot;PostalCode&quot;: &quot;123678&quot;,&#xA;    &quot;PhoneNumber&quot;: &quot;77777777&quot;,&#xA;    &quot;UserID&quot;: &quot;a22&quot;,&#xA;    &quot;CreateDate&quot;: &quot;05-OCT-2015 09:23:12 AM&quot;,&#xA;    &quot;Age&quot;: &quot;44&quot;,&#xA;    &quot;IP&quot;: &quot;kjj44&quot;,&#xA;    &quot;Source&quot;: &quot;desktop&quot;,&#xA;    &quot;Culture&quot;: &quot;aa&quot;,&#xA;    &quot;EntryCode&quot;: &quot;ddd&quot;,&#xA;    &quot;EntryCodeType&quot;: &quot;dddd&quot;,&#xA;    &quot;Redemption&quot;: &quot;swq&quot;,&#xA;    &quot;RedeemedAt&quot;: &quot;asas&quot;,&#xA;    &quot;ExternalInfo&quot;: &quot;asa&quot;,&#xA;    &quot;CultureInfo&quot;: &quot;Y&quot;,&#xA;    &quot;InactiveIndicator&quot;: &quot;ooii&quot;,&#xA;    &quot;Subscriptions&quot;: {&#xA;      &quot;Subscription&quot;: {&#xA;        &quot;ID&quot;: &quot;666&quot;&#xA;      }&#xA;    },&#xA;    &quot;NVPairs&quot;: {&#xA;      &quot;NVPair&quot;: {&#xA;        &quot;Name&quot;: &quot;aaa&quot;&#xA;      }&#xA;    },&#xA;    &quot;SourceApp&quot;: &quot;ffff&quot;,&#xA;    &quot;SourceKey&quot;: &quot;lklk&quot;,&#xA;    &quot;SourceSendDate&quot;: &quot;09-OCT-2015&quot;&#xA;  }&#xA;}&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <apikit:mapping-exception-strategy name="apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>
